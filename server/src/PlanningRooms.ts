@@ -12,6 +12,7 @@ export const EVENTS = {
   START_VOTE: 'START_VOTE',
   END_VOTE: 'END_VOTE',
   VOTE: 'VOTE',
+  SET_QUESTION: 'SET_QUESTION',
 
   POKE: 'POKE',
   ERROR: 'ERROR',
@@ -122,6 +123,11 @@ export class PlanningRooms {
       room.votes.push(vote);
     }
 
+    this.setRooms(room);
+  }
+
+  setQuestion(room: Room, question: string): void {
+    room.currentQuestion = question;
     this.setRooms(room);
   }
 

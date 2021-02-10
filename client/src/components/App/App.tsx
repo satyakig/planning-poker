@@ -9,7 +9,9 @@ import Sidebar from 'components/Sidebar';
 import MainVew from 'components/MainView';
 import NameDialog from 'components/NameDialog';
 import Notification from 'components/Notification';
+import SetQuestionDialog from 'components/SetQuestionDialog';
 import './App.css';
+import Poke from 'components/Poke';
 
 const useStyles = makeStyles((theme: Theme) => {
   return createStyles({
@@ -33,9 +35,11 @@ function App() {
         <CircularProgress color="secondary" />
       </Backdrop>
       <Notification />
+      <Poke />
       <NameDialog />
       <JoinRoomDialog />
       <CreateRoomDialog />
+      <SetQuestionDialog />
       <div className="left">
         <Sidebar />
       </div>

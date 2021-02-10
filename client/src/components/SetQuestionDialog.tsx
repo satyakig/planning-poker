@@ -5,26 +5,30 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ReduxState } from 'redux/CombinedReducer';
 import { Socket } from 'lib/Socket';
 import { UserInfo } from 'lib/UserHook';
-import { setCreateRoomAction } from 'redux/Actions';
+import { setQuestionAction } from 'redux/Actions';
+import { RoomInfo } from 'lib/RoomHooks';
+import { Room } from 'redux/Models';
 
-function CreateRoomDialog() {
+function SetQuestionDialog() {
   const dispatch = useDispatch();
+
   const show = useSelector((state: ReduxState) => {
-    return state.appStateReducer.showCreateRoom;
+    return state.appStateReducer.showSetQuestion;
   });
 
   const { user } = UserInfo();
+  const selectedRoom = RoomInfo();
 
-  const [roomName, setRoomName] = useState('');
+  const [question, setQuestion] = useState('');
 
-  function hideCreateRoom() {
-    setRoomName('');
-    dispatch(setCreateRoomAction(false));
+  function hideSetQuestion() {
+    setQuestion('');
+    dispatch(setQuestionAction(false));
   }
 
   function submit() {
-    Socket.getInstance().createRoom(roomName, user);
-    hideCreateRoom();
+    Socket.getInstance().setQuestion(selectedRoom as Room, user, question);
+    hideSetQuestion();
   }
 
   return (
@@ -33,28 +37,28 @@ function CreateRoomDialog() {
       disableBackdropClick={false}
       disableEscapeKeyDown={false}
       fullWidth={true}
-      onClose={hideCreateRoom}
+      onClose={hideSetQuestion}
     >
-      <DialogTitle>Create Room</DialogTitle>
+      <DialogTitle>Set Topic</DialogTitle>
       <DialogContent>
         <TextField
           autoFocus={true}
-          label="Room Name"
+          label="Topic"
           fullWidth={true}
           color="secondary"
-          value={roomName}
+          value={question}
           onChange={(event) => {
-            setRoomName(event.target.value);
+            setQuestion(event.target.value);
           }}
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={submit} color="secondary" disabled={!roomName}>
-          Create
+        <Button onClick={submit} color="secondary" disabled={!question}>
+          Set
         </Button>
       </DialogActions>
     </Dialog>
   );
 }
 
-export default CreateRoomDialog;
+export default SetQuestionDialog;

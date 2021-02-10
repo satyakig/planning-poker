@@ -171,10 +171,41 @@ io.on('connection', (socket: Socket) => {
       return;
     }
 
-    PlanningRooms.getInstance().vote(vote, room);
+    PlanningRooms.getInstance().vote(vote, doesRoomExist);
     io.to(doesRoomExist.id).emit(EVENTS.GET_ROOMS, PlanningRooms.getInstance().roomsArr);
+  });
 
-    logObject('vote', PlanningRooms.getInstance().roomsArr);
+  socket.on(EVENTS.SET_QUESTION, ({ room, user, question }) => {
+    const doesUserExist = PlanningRooms.getInstance().getUser(user.id);
+    const doesRoomExist = PlanningRooms.getInstance().getRoom(room.id);
+
+    if (!doesUserExist) {
+      socket.emit(EVENTS.ERROR, 'No user found with this ID');
+      return;
+    }
+
+    if (!doesRoomExist) {
+      socket.emit(EVENTS.ERROR, 'No room found with this ID');
+      return;
+    }
+
+    const isUserInRoom = PlanningRooms.getInstance().isUserInRoom(doesUserExist, doesRoomExist);
+
+    if (!isUserInRoom) {
+      socket.emit(EVENTS.ERROR, 'This user is not in this room');
+      return;
+    }
+
+    PlanningRooms.getInstance().setQuestion(doesRoomExist, question);
+    io.to(doesRoomExist.id).emit(EVENTS.GET_ROOMS, PlanningRooms.getInstance().roomsArr);
+  });
+
+  socket.on(EVENTS.POKE, ({ user }) => {
+    const doesUserExist = PlanningRooms.getInstance().getUser(user.id);
+
+    if (doesUserExist) {
+      io.emit(EVENTS.POKE, doesUserExist);
+    }
   });
 });
 

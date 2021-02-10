@@ -1,9 +1,13 @@
 import React from 'react';
-import { Snackbar, IconButton } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
+import { Snackbar } from '@material-ui/core';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReduxState } from 'redux/CombinedReducer';
 import { setErrorAction } from 'redux/Actions';
+
+function Alert(props: AlertProps) {
+  return <MuiAlert elevation={6} variant="standard" {...props} />;
+}
 
 function Notification() {
   const dispatch = useDispatch();
@@ -22,19 +26,17 @@ function Notification() {
   return (
     <Snackbar
       anchorOrigin={{
-        vertical: 'top',
         horizontal: 'center',
+        vertical: 'top',
       }}
       open={error.length > 0 && initialized}
       autoHideDuration={7500}
       onClose={hide}
-      message={error}
-      action={
-        <IconButton size="small" color="inherit" onClick={hide}>
-          <CloseIcon fontSize="small" />
-        </IconButton>
-      }
-    />
+    >
+      <Alert onClose={hide} severity="error" style={{ userSelect: 'none' }}>
+        {error.toUpperCase()}
+      </Alert>
+    </Snackbar>
   );
 }
 

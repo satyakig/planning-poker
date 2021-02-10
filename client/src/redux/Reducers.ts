@@ -58,6 +58,20 @@ export function appStateReducer(state: AppState = new AppState(), action: AnyAct
       return model;
     }
 
+    case ActionConstants.TOGGLE_SET_QUESTION: {
+      const model = clone<AppState>(state);
+      model.showSetQuestion = action.show;
+
+      return model;
+    }
+
+    case ActionConstants.POKE: {
+      const model = clone<AppState>(state);
+      model.poke = action.poke;
+
+      return model;
+    }
+
     default:
       return state;
   }

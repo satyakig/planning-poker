@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/styles';
 import { User, VoteValues } from 'redux/Models';
 import { UserInfo } from 'lib/UserHook';
 import { FindUserVote, RoomInfo } from 'lib/RoomHooks';
+import { Socket } from 'lib/Socket';
 
 type UserCardProps = {
   roomUser: User;
@@ -12,10 +13,16 @@ type UserCardProps = {
 const useStyles = makeStyles({
   card: {
     margin: '25px',
-    width: 180,
+    width: 200,
     height: 150,
     textAlign: 'center',
     userSelect: 'none',
+  },
+  content: {},
+  name: {
+    height: '2rem',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
   },
 });
 
@@ -25,8 +32,11 @@ function UserCard(props: UserCardProps) {
   const selectedRoom = RoomInfo();
   const userVote = FindUserVote(props.roomUser);
 
-  const disabled = !validUser || !selectedRoom;
+  function poke() {
+    Socket.getInstance().poke(props.roomUser);
+  }
 
+  const disabled = !validUser || !selectedRoom;
   let voteValue: string | number = '';
 
   if (selectedRoom) {
@@ -43,8 +53,8 @@ function UserCard(props: UserCardProps) {
 
   return (
     <Card variant="outlined" elevation={10} className={classes.card}>
-      <CardContent>
-        <Typography color="textSecondary" gutterBottom={true}>
+      <CardContent className={classes.content}>
+        <Typography color="textSecondary" className={classes.name}>
           {props.roomUser.name}
         </Typography>
         <Typography variant="h6">{voteValue}</Typography>
@@ -54,6 +64,7 @@ function UserCard(props: UserCardProps) {
           variant="outlined"
           fullWidth={true}
           disabled={disabled || props.roomUser.id === user.id}
+          onClick={poke}
         >
           Poke
         </Button>

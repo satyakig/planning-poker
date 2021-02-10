@@ -62,10 +62,14 @@ export class AppState {
   error: string;
   showCreateRoom: boolean;
   showJoinRoom: boolean;
+  showSetQuestion: boolean;
+  poke: User | null;
 
   constructor() {
     this.error = '';
     this.showCreateRoom = false;
     this.showJoinRoom = false;
+    this.showSetQuestion = false;
+    this.poke = null;
   }
 }

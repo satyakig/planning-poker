@@ -19,6 +19,7 @@ function JoinRoomDialog() {
   const [roomId, setRoomId] = useState('');
 
   function hideJoinRoom() {
+    setRoomId('');
     dispatch(setJoinRoomAction(false));
   }
 

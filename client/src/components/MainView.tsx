@@ -1,9 +1,13 @@
 import React from 'react';
 import { createStyles, makeStyles } from '@material-ui/styles';
-import { TextField } from '@material-ui/core';
+import { IconButton, Typography } from '@material-ui/core';
 import { RoomInfo } from 'lib/RoomHooks';
 import Footer from 'components/Footer';
 import UserCard from 'components/UserCard';
+import { UserInfo } from 'lib/UserHook';
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
+import { useDispatch } from 'react-redux';
+import { setQuestionAction } from 'redux/Actions';
 
 const useStyles = makeStyles(() => {
   return createStyles({
@@ -14,10 +18,17 @@ const useStyles = makeStyles(() => {
       padding: '10px',
       height: '100%',
     },
+    questionContainer: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignContent: 'center',
+      justifyContent: 'center',
+    },
     question: {
       flexGrow: 0,
       textAlign: 'center',
       userSelect: 'none',
+      marginRight: '5px',
     },
     grid: {
       flexGrow: 1,
@@ -39,24 +50,30 @@ const useStyles = makeStyles(() => {
 });
 
 function MainVew() {
+  const dispatch = useDispatch();
   const classes = useStyles();
   const selectedRoom = RoomInfo();
+  const { validUser } = UserInfo();
 
-  if (selectedRoom) {
+  function edit() {
+    dispatch(setQuestionAction(true));
+  }
+
+  if (selectedRoom && validUser) {
     return (
       <div className={classes.mainView}>
-        <div className={classes.question}>
-          <TextField
-            label="Voting on..."
-            variant="outlined"
-            value={selectedRoom.currentQuestion}
-            color="secondary"
-            fullWidth={true}
-          />
+        <div className={classes.questionContainer}>
+          <Typography className={classes.question} variant="h6">
+            Viewing {selectedRoom.currentQuestion || '??'}
+          </Typography>
+          <IconButton size="small" color="inherit" onClick={edit}>
+            <EditOutlinedIcon fontSize="small" />
+          </IconButton>
         </div>
+
         <div className={classes.grid}>
-          {selectedRoom.users.map((user) => {
-            return <UserCard roomUser={user} key={user.id} />;
+          {selectedRoom.users.map((userRoom) => {
+            return <UserCard roomUser={userRoom} key={userRoom.id} />;
           })}
         </div>
         <div className={classes.footer}>

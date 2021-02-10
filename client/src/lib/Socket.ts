@@ -3,6 +3,7 @@ import { AnyAction, Store } from 'redux';
 import {
   setErrorAction,
   setInitializedAction,
+  setPokeAction,
   setRoomsActions,
   setUserAction,
 } from 'redux/Actions';
@@ -19,6 +20,7 @@ export const EVENTS = {
   START_VOTE: 'START_VOTE',
   END_VOTE: 'END_VOTE',
   VOTE: 'VOTE',
+  SET_QUESTION: 'SET_QUESTION',
 
   POKE: 'POKE',
   ERROR: 'ERROR',
@@ -62,6 +64,10 @@ export class Socket {
       }
     });
 
+    this.socket.on(EVENTS.POKE, (user: User) => {
+      this.generateAction(setPokeAction(user));
+    });
+
     this.socket.on('disconnect', () => {
       this.generateAction(setInitializedAction(false));
       this.generateAction(setUserAction({ id: '', name: '' }));
@@ -90,6 +96,14 @@ export class Socket {
 
   vote(room: Room, vote: Vote) {
     this.socket.emit(EVENTS.VOTE, { room, vote });
+  }
+
+  setQuestion(room: Room, user: User, question: string) {
+    this.socket.emit(EVENTS.SET_QUESTION, { room, user, question });
+  }
+
+  poke(user: User) {
+    this.socket.emit(EVENTS.POKE, { user });
   }
 
   private generateAction(action: AnyAction): void {
