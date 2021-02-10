@@ -19,6 +19,8 @@ const useStyles = makeStyles(() => {
   });
 });
 
+const audios = ['chewbacka', 'babyCrying'];
+
 function Notification() {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -32,13 +34,23 @@ function Notification() {
     dispatch(setPokeAction(null));
   }
 
+  const open = poke !== null && poke.id === user.id && validUser;
+
+  if (open) {
+    const index = Math.floor(Math.random() * Math.floor(2));
+
+    try {
+      new Audio(`./${audios[index]}.mp3`).play().then().catch();
+    } catch (err) {}
+  }
+
   return (
     <Snackbar
       anchorOrigin={{
         horizontal: 'center',
         vertical: 'top',
       }}
-      open={poke !== null && poke.id === user.id && validUser}
+      open={open}
       onClose={hide}
       message="poke"
       className={classes.content}
