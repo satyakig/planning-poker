@@ -1,0 +1,85 @@
+{
+  "name": "planning-poker",
+  "description": "Planning Poker for Agile Sprints",
+  "author": "Satyaki Ghosh",
+  "version": "0.1.0",
+  "private": true,
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": "npm run format"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "format": "eslint --cache --fix . --ext .ts --ext .tsx",
+    "lint": "eslint --cache . --ext .ts --ext .tsx",
+    "lint:staged": "lint-staged",
+    "deploy": "npm run build && firebase deploy --only hosting"
+  },
+  "dependencies": {
+    "@material-ui/core": "4.11.3",
+    "@material-ui/icons": "4.11.2",
+    "@material-ui/lab": "4.0.0-alpha.57",
+    "@material-ui/styles": "4.11.3",
+    "axios": "0.21.1",
+    "clone": "2.1.2",
+    "clsx": "1.1.1",
+    "lodash": "4.17.20",
+    "mathjs": "9.2.0",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "react-redux": "7.2.2",
+    "react-scripts": "4.0.2",
+    "react-thunk": "1.0.0",
+    "redux": "4.0.5",
+    "redux-thunk": "2.3.0",
+    "reselect": "4.0.0",
+    "socket.io-client": "3.1.1",
+    "typescript": "4.1.4",
+    "uuid": "8.3.2",
+    "validator": "13.5.2"
+  },
+  "devDependencies": {
+    "@types/clone": "2.1.0",
+    "@types/mathjs": "6.0.11",
+    "@types/node": "12.19.16",
+    "@types/react": "17.0.1",
+    "@types/react-dom": "17.0.0",
+    "@types/react-redux": "7.1.16",
+    "@types/redux-logger": "3.0.8",
+    "@types/redux-thunk": "2.1.0",
+    "@types/reselect": "2.2.0",
+    "@types/socket.io-client": "1.4.35",
+    "eslint-config-google": "0.14.0",
+    "eslint-config-prettier": "7.2.0",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-prettier": "3.3.1",
+    "eslint-plugin-react-hooks": "4.2.0",
+    "husky": "5.0.9",
+    "lint-staged": "10.5.4",
+    "prettier": "2.2.1",
+    "redux-logger": "3.0.6"
+  }
+}

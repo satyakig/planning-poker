@@ -1,0 +1,20 @@
+main {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: row;
+}
+
+.left {
+  flex-basis: 20%;
+  flex-grow: 0;
+  flex-shrink: 0;
+  height: 100vh;
+}
+
+.right {
+  flex-grow: 1;
+  height: 100vh;
+}
