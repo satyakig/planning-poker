@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Snackbar } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/styles';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { ReduxState } from 'redux/CombinedReducer';
-import { setPokeAction } from 'redux/Actions';
 import { UserInfo } from 'lib/UserHook';
 
 const useStyles = makeStyles(() => {
@@ -23,26 +22,55 @@ const audios = ['chewbacka', 'babyCrying'];
 
 function Notification() {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const audioRef = useRef<null | HTMLAudioElement>(null);
+  const { user, validUser } = UserInfo();
+  const [options, setOptions] = useState({
+    show: false,
+    from: '',
+  });
+
   const poke = useSelector((state: ReduxState) => {
     return state.appStateReducer.poke;
   });
 
-  const { user, validUser } = UserInfo();
-
   function hide() {
-    dispatch(setPokeAction(null));
+    setOptions({
+      show: false,
+      from: '',
+    });
   }
 
-  const open = poke !== null && poke.id === user.id && validUser;
+  useEffect(() => {
+    if (poke !== null) {
+      console.log(poke);
+    }
 
-  if (open) {
-    const index = Math.floor(Math.random() * Math.floor(2));
+    if (poke !== null && poke.to.id === user.id && validUser) {
+      setOptions({
+        show: true,
+        from: poke.from.name,
+      });
+    }
+  }, [poke, user.id, validUser]);
 
-    try {
-      new Audio(`./${audios[index]}.mp3`).play().then().catch();
-    } catch (err) {}
-  }
+  useEffect(() => {
+    if (options.show) {
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+
+      try {
+        const index = Math.floor(Math.random() * Math.floor(2));
+
+        const el = new Audio(`./${audios[index]}.mp3`);
+        el.play().then().catch();
+        audioRef.current = el;
+      } catch (err) {}
+    } else if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+  }, [options.show]);
 
   return (
     <Snackbar
@@ -50,9 +78,10 @@ function Notification() {
         horizontal: 'center',
         vertical: 'top',
       }}
-      open={open}
+      open={options.show}
       onClose={hide}
-      message="poke"
+      autoHideDuration={2500}
+      message={`poke - ${poke?.from.name}`}
       className={classes.content}
     />
   );

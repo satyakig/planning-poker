@@ -33,7 +33,7 @@ function UserCard(props: UserCardProps) {
   const userVote = FindUserVote(props.roomUser);
 
   function poke() {
-    Socket.getInstance().poke(props.roomUser);
+    Socket.getInstance().poke(user, props.roomUser);
   }
 
   const disabled = !validUser || !selectedRoom;

@@ -25,6 +25,7 @@ function leaveAndJoin(rooms: Room[], newRoom: Room, socket: Socket) {
   socket.join(newRoom.id);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function logObject(key: string, object: unknown) {
   console.debug(key, util.inspect(object, { showHidden: false, depth: null }));
 }
@@ -65,8 +66,6 @@ io.on('connection', (socket: Socket) => {
     } else {
       socket.emit(EVENTS.ERROR, 'No user found with this ID');
     }
-
-    logObject('new-room', PlanningRooms.getInstance().roomsArr);
   });
 
   socket.on(EVENTS.JOIN_ROOM, ({ roomId, user }) => {
@@ -87,8 +86,6 @@ io.on('connection', (socket: Socket) => {
 
     leaveAndJoin(PlanningRooms.getInstance().roomsArr, room, socket);
     io.emit(EVENTS.GET_ROOMS, PlanningRooms.getInstance().roomsArr);
-
-    logObject('join-room', PlanningRooms.getInstance().roomsArr);
   });
 
   socket.on(EVENTS.START_VOTE, ({ room, user }) => {
@@ -114,8 +111,6 @@ io.on('connection', (socket: Socket) => {
 
     PlanningRooms.getInstance().startVote(doesRoomExist);
     io.to(doesRoomExist.id).emit(EVENTS.GET_ROOMS, PlanningRooms.getInstance().roomsArr);
-
-    logObject('start-vote', PlanningRooms.getInstance().roomsArr);
   });
 
   socket.on(EVENTS.END_VOTE, ({ room, user }) => {
@@ -141,8 +136,6 @@ io.on('connection', (socket: Socket) => {
 
     PlanningRooms.getInstance().endVote(doesRoomExist);
     io.to(doesRoomExist.id).emit(EVENTS.GET_ROOMS, PlanningRooms.getInstance().roomsArr);
-
-    logObject('end-vote', PlanningRooms.getInstance().roomsArr);
   });
 
   socket.on(EVENTS.VOTE, ({ room, vote }) => {
@@ -200,12 +193,13 @@ io.on('connection', (socket: Socket) => {
     io.to(doesRoomExist.id).emit(EVENTS.GET_ROOMS, PlanningRooms.getInstance().roomsArr);
   });
 
-  socket.on(EVENTS.POKE, ({ user }) => {
-    const doesUserExist = PlanningRooms.getInstance().getUser(user.id);
+  socket.on(EVENTS.POKE, ({ thisUser, otherUser }) => {
+    const message = {
+      to: otherUser,
+      from: thisUser,
+    };
 
-    if (doesUserExist) {
-      io.emit(EVENTS.POKE, doesUserExist);
-    }
+    io.emit(EVENTS.POKE, message);
   });
 });
 
@@ -216,8 +210,11 @@ httpServer.listen(PORT, () => {
   PlanningRooms.getInstance();
 
   setInterval(() => {
+    PlanningRooms.getInstance().checkDataSize();
+
     for (const room of PlanningRooms.getInstance().roomsArr) {
       if (room.lastActive < Date.now() - interval) {
+        console.debug(`Deleting room ${room.id}`);
         PlanningRooms.getInstance().deleteRoom(room);
       }
     }

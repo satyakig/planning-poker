@@ -136,6 +136,13 @@ export class PlanningRooms {
     this.roomsArr = Array.from(this.ROOMS.values());
   }
 
+  checkDataSize(): void {
+    if (this.USERS.size > 1000 || this.ROOMS.size > 1000) {
+      console.debug('deleting everything');
+      PlanningRooms.instance = new PlanningRooms();
+    }
+  }
+
   private leaveAndJoin(user: User, newRoom: Room) {
     for (const room of this.roomsArr) {
       room.users = room.users.filter((roomUser) => {

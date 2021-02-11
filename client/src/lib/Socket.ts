@@ -7,7 +7,7 @@ import {
   setRoomsActions,
   setUserAction,
 } from 'redux/Actions';
-import { User, Room, Vote } from 'redux/Models';
+import { User, Room, Vote, Poke } from 'redux/Models';
 
 export const EVENTS = {
   NEW_USER: 'NEW_USER',
@@ -64,8 +64,8 @@ export class Socket {
       }
     });
 
-    this.socket.on(EVENTS.POKE, (user: User) => {
-      this.generateAction(setPokeAction(user));
+    this.socket.on(EVENTS.POKE, (data: Poke) => {
+      this.generateAction(setPokeAction(data));
     });
 
     this.socket.on('disconnect', () => {
@@ -102,8 +102,8 @@ export class Socket {
     this.socket.emit(EVENTS.SET_QUESTION, { room, user, question });
   }
 
-  poke(user: User) {
-    this.socket.emit(EVENTS.POKE, { user });
+  poke(thisUser: User, otherUser: User) {
+    this.socket.emit(EVENTS.POKE, { thisUser, otherUser });
   }
 
   private generateAction(action: AnyAction): void {

@@ -5,6 +5,11 @@ export type User = {
   name: string;
 };
 
+export type Poke = {
+  to: User;
+  from: User;
+};
+
 export type Vote = {
   value: string | number;
   userId: string;
@@ -63,7 +68,7 @@ export class AppState {
   showCreateRoom: boolean;
   showJoinRoom: boolean;
   showSetQuestion: boolean;
-  poke: User | null;
+  poke: Poke | null;
 
   constructor() {
     this.error = '';

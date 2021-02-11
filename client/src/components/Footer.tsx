@@ -41,16 +41,16 @@ function Footer() {
         return (
           <React.Fragment>
             <Grid item={true} xs={3}>
-              <Typography align="center">Min: {Math.min(...votes)}</Typography>
+              <Typography align="center">Min: {Math.min(...votes).toFixed(1)}</Typography>
             </Grid>
             <Grid item={true} xs={3}>
-              <Typography align="center">Mean: {mean(votes)}</Typography>
+              <Typography align="center">Mean: {mean(votes).toFixed(1)}</Typography>
             </Grid>
             <Grid item={true} xs={3}>
-              <Typography align="center">Median: {median(votes)}</Typography>
+              <Typography align="center">Median: {median(votes).toFixed(1)}</Typography>
             </Grid>
             <Grid item={true} xs={3}>
-              <Typography align="center">Max: {Math.max(...votes)}</Typography>
+              <Typography align="center">Max: {Math.max(...votes).toFixed(1)}</Typography>
             </Grid>
           </React.Fragment>
         );

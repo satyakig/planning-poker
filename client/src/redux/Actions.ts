@@ -1,5 +1,5 @@
 import { AnyAction } from 'redux';
-import { Room, User } from 'redux/Models';
+import { Poke, Room, User } from 'redux/Models';
 
 export const ActionConstants = {
   SET_USER: 'SET_USER',
@@ -42,7 +42,7 @@ export function setErrorAction(error: string): AnyAction {
   };
 }
 
-export function setPokeAction(poke: User | null): AnyAction {
+export function setPokeAction(poke: Poke | null): AnyAction {
   return {
     type: ActionConstants.POKE,
     poke,
